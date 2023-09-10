@@ -1,7 +1,7 @@
 {
   description = "Project starter";
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs.url = "nixpkgs/nixpkgs-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     nix2container.url = "github:nlewo/nix2container";
   };
@@ -13,7 +13,7 @@
         let pkgs = import nixpkgs { inherit system; };
         in {
           devShells.default = pkgs.mkShell {
-            packages = with pkgs; [ go gopls nodejs nodePackages.pnpm ];
+            packages = with pkgs; [ go nodejs bun nodePackages.pnpm ];
           };
         };
     };

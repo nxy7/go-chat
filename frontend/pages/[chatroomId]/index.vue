@@ -1,0 +1,3 @@
+<template>
+    <ChatRoomContainer></ChatRoomContainer>
+</template>
