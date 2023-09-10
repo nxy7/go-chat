@@ -19,6 +19,3 @@ export def project-root [] {
   }
 }
 
-export def `main dirhash` [...dirs: string] {
-  print $dirs
-}

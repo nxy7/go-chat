@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	s := server.Server{Port: 8282}
+	s := server.Server{Port: 8282, Prefix: "/api"}
 	err := s.Start()
 	if err != nil {
 		fmt.Println(err)

@@ -12,7 +12,7 @@ type Server struct {
 }
 
 func (s *Server) Start() error {
-	http.HandleFunc(s.Prefix+"/", HealthHandler)
+	http.HandleFunc(s.Prefix+"/health", HealthHandler)
 	http.HandleFunc(s.Prefix+"/user/:id/messages", GetUserMessagesHandler)
 	http.HandleFunc(s.Prefix+"/user/:id/details", GetUserDetails)
 	http.HandleFunc(s.Prefix+"/channel/:id/messages", GetChannelMessagesHandler)
