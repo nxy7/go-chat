@@ -8,12 +8,15 @@ export def main [] {
 
 # start development (needs k8s cluster with service running)
 export def `main dev` [] {
-    # kubectl scale --replicas=0 deployment/frontend -n streampai
+    try {
+        telepresence helm install
+        telepresence connect
+    }
     try {
         telepresence intercept frontend --port 3000:http --mechanism tcp --namespace chat-app
     }
     cd $'(utils project-root)/frontend';
-    bun run dev;
+    bun run dev --host;
 }
 
 # build docker image and tag it

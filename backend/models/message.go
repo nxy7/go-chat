@@ -3,6 +3,8 @@ package models
 
 import (
 	"time"
+
+	"github.com/redis/go-redis/v9"
 )
 
 type Message struct {
@@ -15,4 +17,10 @@ type Message struct {
 type MessagePublisher interface {
 	PublishChatMessage(msg Message, channelId string) error
 	GetChannelMessageStream(id string) (<-chan Message, error)
+}
+
+func (m *Message) PublishChatMessage(channelId string, redis redis.Client) error {
+	// publish message to redis
+	// update message count in mongodb
+	return nil
 }

@@ -2,13 +2,16 @@ package main
 
 import (
 	"fmt"
+	"go-chat/config"
 	"go-chat/server"
+	"log"
 )
 
 func main() {
-	s := server.Server{Port: 8282, Prefix: "/api"}
-	err := s.Start()
-	if err != nil {
+	config := config.FromEnv()
+	log.Println("Config loaded")
+
+	if err := server.Start(config); err != nil {
 		fmt.Println(err)
 	}
 }

@@ -9,6 +9,10 @@ export def main [] {
 # start development
 export def `main dev` [] {
     try {
+        telepresence helm install
+        telepresence connect
+    }
+    try {
         telepresence intercept backend --port 8282:http --mechanism tcp --namespace chat-app
     }
     cd $'(utils project-root)/backend';

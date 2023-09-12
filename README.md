@@ -8,7 +8,6 @@ Welcome to the Real-Time Chat App! This project is a showcase of real-time messa
 
 - 📬 Real-time Messaging: Chat in real-time thanks to WebSockets.
 - 🙋 User Authentication: Sign in securely.
-- 💾 Persistent Messages: Chat history saved in MongoDB.
 - ⚡️ Quick Access: Recently active chats and messages cached in Redis.
 - 🛠 Scalability: Deployed in a Kubernetes cluster for easy scaling.
 
@@ -16,7 +15,7 @@ Welcome to the Real-Time Chat App! This project is a showcase of real-time messa
 
 - Frontend: Vue
 - Backend: Golang
-- Authentication: ory/Kratos
+- Authentication: Custom JWT Authentication managed by Backend
 - Database: MongoDB
 - Cache: Redis
 - Orchestration: Kubernetes

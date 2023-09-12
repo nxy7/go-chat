@@ -1,29 +1,27 @@
 package server
 
 import (
-	"fmt"
 	"go-chat/config"
+	"log"
 	"net/http"
+	"strconv"
 )
 
-type Server struct {
-	Prefix string
-	Port   int32
-}
+func Start(c config.Config) error {
+	handlerCtx, err := InitializeHandlerCtx(c)
+	if err != nil {
+		panic(err)
+	}
+	mux := http.NewServeMux()
 
-func (s *Server) Start() error {
-	http.HandleFunc(s.Prefix+"/health", HealthHandler)
-	http.HandleFunc(s.Prefix+"/user/:id/messages", GetUserMessagesHandler)
-	http.HandleFunc(s.Prefix+"/user/:id/details", GetUserDetails)
-	http.HandleFunc(s.Prefix+"/channel/:id/messages", GetChannelMessagesHandler)
-	http.HandleFunc(s.Prefix+"/channel/:id/details", GetChannelDetails)
+	mux.HandleFunc(c.Prefix+"/health", handlerCtx.HealthHandler)
+	mux.HandleFunc(c.Prefix+"/user/{id}/messages", handlerCtx.UserMessagesHandler)
+	mux.HandleFunc(c.Prefix+"/user/{id}/details", handlerCtx.UserDetailsHandler)
+	mux.HandleFunc(c.Prefix+"/channel", handlerCtx.ChannelHandler)
+	mux.HandleFunc(c.Prefix+"/channel/{id}/message", handlerCtx.ChannelMessageHandler)
+	mux.HandleFunc(c.Prefix+"/channel/{id}/details", handlerCtx.ChannelDetailsHandler)
+	mux.HandleFunc(c.Prefix+"/channel/{id}/eventStream", handlerCtx.ChannelEventStreamHandler)
 
-	http.HandleFunc(s.Prefix+"/channel/:id/eventStream", GetChannelEventStream)
-
-	http.ListenAndServe(fmt.Sprintf(":%d", s.Port), nil)
-	return nil
-}
-
-func FromConfig(config config.Config) Server {
-	return Server{}
+	log.Println("Starting server on :" + strconv.Itoa(c.Port) + c.Prefix)
+	return http.ListenAndServe(":"+strconv.Itoa(c.Port), mux)
 }

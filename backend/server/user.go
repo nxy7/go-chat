@@ -6,7 +6,7 @@ import (
 )
 
 // get user details
-func GetUserDetails(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerCtx) UserDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "ok")
 }
 

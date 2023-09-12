@@ -20,8 +20,8 @@ spec:
   selector:
     app: mongodb
   ports:
-  - port: 8081
-    targetPort: 8081
+  - port: 27017
+    targetPort: 27017
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -41,7 +41,7 @@ spec:
       - name: mongodb
         image: mongo:latest
         ports:
-        - containerPort: 8081
+        - containerPort: 27017
         envFrom:
         - secretRef:
             name: envfile

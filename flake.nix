@@ -12,7 +12,11 @@
       systems = [ "x86_64-linux" ];
       perSystem = { config, system, ... }:
         let
-          pkgs = import nixpkgs { inherit system; };
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfreePredicate = pkg:
+              builtins.elem (pkgs.lib.getName pkg) [ "mongodb-compass" ];
+          };
           telepresencePkg =
             inputs.telepresence-nix.outputs.defaultPackage.${system};
         in {
@@ -21,6 +25,7 @@
               go
               telepresencePkg
               nodejs
+              mongodb-compass
               bun
               kubernetes-helm
               nodePackages.pnpm
