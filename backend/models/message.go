@@ -8,6 +8,7 @@ import (
 )
 
 type Message struct {
+	MessageId  string
 	AuthorName string
 	Content    string
 	Hidden     bool

@@ -3,15 +3,19 @@ package server
 import (
 	"context"
 	"go-chat/config"
+	"go-chat/storage"
 
+	// "github.com/apple/foundationdb/bindings/go/src/fdb"
 	"github.com/redis/go-redis/v9"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type HandlerCtx struct {
-	MongoDB mongo.Client
-	Redis   redis.Client
+	MongoDB storage.Mongo
+	// FoundationDB fdb.Database
+	Redis  storage.Redis
+	Config config.Config
 }
 
 func InitializeHandlerCtx(c config.Config) (*HandlerCtx, error) {
@@ -22,8 +26,9 @@ func InitializeHandlerCtx(c config.Config) (*HandlerCtx, error) {
 	if err != nil {
 		return nil, err
 	}
+	mDb := mc.Database("chat-app")
 	rc := redis.NewClient(&redis.Options{
 		Addr: c.RedisUrl,
 	})
-	return &HandlerCtx{MongoDB: *mc, Redis: *rc}, nil
+	return &HandlerCtx{storage.Mongo{Db: mDb}, storage.Redis{Client: *rc}, c}, nil
 }

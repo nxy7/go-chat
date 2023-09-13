@@ -1,12 +1,12 @@
 <template>
-    <LoginForm :OnSubmit="Login"></LoginForm>
+    <LoginForm :OnSubmit="Register"></LoginForm>
 </template>
 
 <script setup lang="ts">
 import LoginForm from '~/components/LoginForm.vue';
 
-async function Login(username: string, password: string) {
-    let response = await fetch("/api/login", {
+async function Register(username: string, password: string) {
+    let response = await fetch("/api/register", {
         method: "POST",
         body: JSON.stringify({ "username": username, "password": password })
     })

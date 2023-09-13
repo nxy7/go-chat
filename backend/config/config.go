@@ -1,8 +1,10 @@
 package config
 
 import (
+	"crypto"
 	"os"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
 )
 
@@ -13,6 +15,10 @@ type Config struct {
 	MongoUrl      string
 	MongoUser     string
 	MongoPassword string
+
+	RefreshTokenSecret string
+	AccessTokenSecret  string
+	JwtSigningMethod   jwt.SigningMethodHMAC
 }
 
 func FromEnv() Config {
@@ -26,12 +32,20 @@ func FromEnv() Config {
 	mongoUser := os.Getenv("MONGO_USER")
 	mongoPassword := os.Getenv("MONGO_PASSWORD")
 
+	refreshSecret := os.Getenv("REFRESH_TOKEN_SECRET")
+	accessSecret := os.Getenv("REFRESH_TOKEN_SECRET")
+
+	signingMethod := jwt.SigningMethodHMAC{Name: "", Hash: crypto.SHA256}
+
 	return Config{
-		Prefix:        prefix,
-		Port:          port,
-		RedisUrl:      redisUrl,
-		MongoUrl:      mongoUrl,
-		MongoUser:     mongoUser,
-		MongoPassword: mongoPassword,
+		Prefix:             prefix,
+		Port:               port,
+		RedisUrl:           redisUrl,
+		MongoUrl:           mongoUrl,
+		MongoUser:          mongoUser,
+		MongoPassword:      mongoPassword,
+		RefreshTokenSecret: refreshSecret,
+		AccessTokenSecret:  accessSecret,
+		JwtSigningMethod:   signingMethod,
 	}
 }

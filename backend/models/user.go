@@ -4,6 +4,7 @@ import "go.mongodb.org/mongo-driver/mongo"
 
 type User struct {
 	Name         string
+	PasswordHash string
 	Avatar       string
 	Messages     []Message
 	MessageCount int32
@@ -15,8 +16,8 @@ type UserStore interface {
 	AddUser(u User) error
 }
 
-func GetUser(name string, mdb mongo.Client) (User, error) {
-	return User{}, nil
+func GetUser(name string, mdb mongo.Client) (*User, error) {
+	return &User{}, nil
 }
 
 func (u *User) UpsertUser(mdb mongo.Client) error {
