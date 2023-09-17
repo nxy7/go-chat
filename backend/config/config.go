@@ -1,7 +1,7 @@
 package config
 
 import (
-	"crypto"
+	_ "crypto/sha256"
 	"os"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -18,7 +18,7 @@ type Config struct {
 
 	RefreshTokenSecret string
 	AccessTokenSecret  string
-	JwtSigningMethod   jwt.SigningMethodHMAC
+	JwtSigningMethod   *jwt.SigningMethodHMAC
 }
 
 func FromEnv() Config {
@@ -33,9 +33,9 @@ func FromEnv() Config {
 	mongoPassword := os.Getenv("MONGO_PASSWORD")
 
 	refreshSecret := os.Getenv("REFRESH_TOKEN_SECRET")
-	accessSecret := os.Getenv("REFRESH_TOKEN_SECRET")
+	accessSecret := os.Getenv("ACCESS_TOKEN_SECRET")
 
-	signingMethod := jwt.SigningMethodHMAC{Name: "", Hash: crypto.SHA256}
+	signingMethod := jwt.SigningMethodHS256
 
 	return Config{
 		Prefix:             prefix,

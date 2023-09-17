@@ -1,9 +1,12 @@
-package server
+package handlers
 
 import (
 	"context"
 	"go-chat/config"
 	"go-chat/storage"
+	"log"
+	"strings"
+	"time"
 
 	// "github.com/apple/foundationdb/bindings/go/src/fdb"
 	"github.com/redis/go-redis/v9"
@@ -19,7 +22,7 @@ type HandlerCtx struct {
 }
 
 func InitializeHandlerCtx(c config.Config) (*HandlerCtx, error) {
-	uri := "mongodb://" + c.MongoUser + ":" + c.MongoPassword + "@" + c.MongoUrl + "/"
+	uri := "mongodb://" + c.MongoUrl + "/"
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	opts := options.Client().ApplyURI(uri).SetServerAPIOptions(serverAPI)
 	mc, err := mongo.Connect(context.Background(), opts)
@@ -27,8 +30,17 @@ func InitializeHandlerCtx(c config.Config) (*HandlerCtx, error) {
 		return nil, err
 	}
 	mDb := mc.Database("chat-app")
+	redisAddr := strings.TrimPrefix(c.RedisUrl, "redis://")
 	rc := redis.NewClient(&redis.Options{
-		Addr: c.RedisUrl,
+		Addr:         redisAddr,
+		DialTimeout:  time.Second * 10,
+		ReadTimeout:  time.Second * 10,
+		WriteTimeout: time.Second * 10,
+		Password:     "",
+		DB:           0,
 	})
+	if rc == nil {
+		log.Println("Nil redis")
+	}
 	return &HandlerCtx{storage.Mongo{Db: mDb}, storage.Redis{Client: *rc}, c}, nil
 }

@@ -1,9 +1,5 @@
 #!/usr/bin/env nu
 
-export def main [] {
-  help commands main
-}
-
 # Returns PWD from root directory
 export def project-root [] {
   let ls = (ls -a | where name == ".git");
@@ -19,3 +15,12 @@ export def project-root [] {
   }
 }
 
+export def telepresence-join [] {
+  telepresence helm install
+  telepresence connect
+}
+
+export def telepresence-intercept [] {
+  telepresence intercept frontend --port 3000:http --mechanism tcp --namespace chat-app
+  telepresence intercept backend --port 8282:http --mechanism tcp --namespace chat-app
+}

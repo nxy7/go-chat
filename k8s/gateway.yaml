@@ -8,8 +8,6 @@ metadata:
     "cert-manager.io/issuer": "ca-issuer"
 spec:
   gatewayClassName: cilium
-  addresses:
-    - value: 172.17.0.2
   listeners:
     - protocol: HTTP
       port: 80

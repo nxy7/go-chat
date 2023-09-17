@@ -2,26 +2,28 @@
 package models
 
 import (
-	"time"
-
-	"github.com/redis/go-redis/v9"
+	"encoding"
+	"encoding/json"
 )
 
 type Message struct {
-	MessageId  string
 	AuthorName string
 	Content    string
 	Hidden     bool
-	CreatedAt  time.Time
+	CreatedAt  int64
 }
+
+func (m Message) MarshalBinary() (data []byte, err error) {
+	return json.Marshal(m)
+}
+func (m *Message) UnmarshalBinary(data []byte) error {
+	return json.Unmarshal(data, &m)
+}
+
+var _ encoding.BinaryMarshaler = Message{}
+var _ encoding.BinaryUnmarshaler = (*Message)(nil)
 
 type MessagePublisher interface {
 	PublishChatMessage(msg Message, channelId string) error
 	GetChannelMessageStream(id string) (<-chan Message, error)
-}
-
-func (m *Message) PublishChatMessage(channelId string, redis redis.Client) error {
-	// publish message to redis
-	// update message count in mongodb
-	return nil
 }

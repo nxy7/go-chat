@@ -8,12 +8,8 @@ import (
 
 func GetLoginData(r *http.Request) (models.LoginData, error) {
 	var loginData models.LoginData
-	var bodyBytes []byte
-	_, err := r.Body.Read(bodyBytes)
+	err := json.NewDecoder(r.Body).Decode(&loginData)
 	if err != nil {
-		return loginData, err
-	}
-	if err = json.Unmarshal(bodyBytes, &loginData); err != nil {
 		return loginData, err
 	}
 	return loginData, nil

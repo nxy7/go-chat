@@ -1,17 +1,14 @@
 <template>
-    <LoginForm :OnSubmit="Login"></LoginForm>
+    <div class="flex flex-col grow p-3 w-full">
+        <LoginForm :OnSubmit="user.login" ButtonText="Login"></LoginForm>
+        <div>Don't have account yet? <NuxtLink to="/register" class="text-primary">Register!</NuxtLink>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
 import LoginForm from '~/components/LoginForm.vue';
+import { useUserStore } from '~/stores/userStore';
 
-async function Login(username: string, password: string) {
-    let response = await fetch("/api/login", {
-        method: "POST",
-        body: JSON.stringify({ "username": username, "password": password })
-    })
-    let json = await response.json()
-    console.log(json)
-}
-
+const user = useUserStore()
 </script>

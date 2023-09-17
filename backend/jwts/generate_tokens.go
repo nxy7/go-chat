@@ -1,8 +1,8 @@
-package server
+package jwts
 
 import (
 	"fmt"
-	"net/http"
+	"log"
 	"time"
 
 	// _ "crypto/sha256"
@@ -11,21 +11,15 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-// endpoint used to refresh access tokens
-func (c *HandlerCtx) RefreshAccessToken(w http.ResponseWriter, r *http.Request) {
-	// first get refresh token from request (should be a part of httpOnly cookie)
-
-	// check if refresh token is valid
-
-	// if it is then generate new access token and return it
-	// r.AddCookie()
-}
-
 func GenerateRefreshToken(user string, refreshSecret string, signingMethod jwt.SigningMethod) (string, error) {
-	rt := jwt.New(signingMethod)
+	rt := jwt.New(signingMethod, func(t *jwt.Token) {})
+	// rt.Header["typ"] = "JWT"
+	// rt.Header["alg"] = signingMethod.Alg()
 	claims := rt.Claims.(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(240 * time.Hour)
+	claims["exp"] = time.Now().Add(240 * time.Hour).Unix()
 	claims["user"] = user
+	log.Println(signingMethod.Alg())
+	log.Println(rt)
 
 	return rt.SignedString([]byte(refreshSecret))
 }
@@ -55,9 +49,27 @@ func GenerateAccessToken(refreshToken string, accessSecret string, refreshSecret
 	userstring := username.(string)
 
 	at := jwt.New(signingMethod)
-	claims := rt.Claims.(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(time.Hour)
+	claims := at.Claims.(jwt.MapClaims)
+	claims["exp"] = time.Now().Add(time.Hour).Unix()
 	claims["user"] = userstring
 
 	return at.SignedString([]byte(accessSecret))
+}
+
+func UserIsAuthenticated(accessToken string, accessSecret string) (bool, error) {
+	rt, err := jwt.Parse(accessToken, func(t *jwt.Token) (interface{}, error) {
+		return []byte(accessSecret), nil
+	})
+	if err != nil {
+		return false, err
+	}
+	exp, err := rt.Claims.GetExpirationTime()
+	if err != nil {
+		return false, err
+	}
+	if exp.Compare(time.Now()) != 1 {
+		return false, fmt.Errorf("Token expired")
+	}
+
+	return true, nil
 }
