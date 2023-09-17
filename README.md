@@ -4,6 +4,18 @@
 
 Welcome to the Real-Time Chat App! This project is a showcase of real-time messaging using Golang, MongoDB, Redis, and Kubernetes. Talk with friends, family, or random strangers in a fast, scalable environment.
 
+## How to run
+### Prerequisites
+```bash
+- kubernetes cluster running with cilium kube-proxy replacement
+- add `noxy.ddns.net:5000` insecure image registry to the cluster
+```
+
+### Run
+```bash
+kubectl apply -k ./k8s/dev
+```
+
 ## Features
 
 - 📬 Real-time Messaging: Chat in real-time thanks to WebSockets.
