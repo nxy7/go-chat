@@ -15,7 +15,7 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-      # hostname: "*.pl"
+      # hostname: "chat-app.nxyt.pl"
       # tls:
       #   certificateRefs:
       #     - kind: Secret
@@ -23,7 +23,7 @@ spec:
     # - protocol: HTTPS
     #   port: 443
     #   name: https
-    #   hostname: "*.pl"
+    #   hostname: "chat-app.nxyt.pl"
     #   tls:
     #     certificateRefs:
     #       - kind: Secret
@@ -66,9 +66,3 @@ spec:
         - name: backend
           namespace: chat-app
           port: 8282
-      # filters:
-      #   - type: URLRewrite
-      #     urlRewrite:
-      #       path:
-      #         replacePrefixMatch: /
-      #         type: ReplacePrefixMatch
