@@ -3,19 +3,9 @@ kind: Kustomization
 namespace: chat-app
 
 resources:
-  - k8s/namespace.yaml
-  - k8s/backend.yaml
-  - k8s/frontend.yaml
-  - k8s/gateway.yaml
-  - k8s/kratos.yaml
-  - k8s/mongodb.yaml
-  - k8s/redis.yaml
-
-secretGenerator:
-- envs:
-  - .env
-  name: envfile
-  type: Opaque
-  options:
-    disableNameSuffixHash: true
-
+  - namespace.yaml
+  - backend.yaml
+  - frontend.yaml
+  - kratos.yaml
+  - mongodb.yaml
+  - redis.yaml

@@ -4,30 +4,21 @@ metadata:
   name: gtw
   namespace: chat-app
   annotations:
-    "io.cilium/lb-ipam-ips": "172.17.0.2"
     "cert-manager.io/issuer": "ca-issuer"
 spec:
   gatewayClassName: cilium
   listeners:
-    - protocol: HTTP
-      port: 80
-      name: http
+    - protocol: HTTPS
+      port: 443
+      name: https
+      hostname: "chat-app.nxyt.pl"
       allowedRoutes:
         namespaces:
           from: All
-      # hostname: "chat-app.nxyt.pl"
-      # tls:
-      #   certificateRefs:
-      #     - kind: Secret
-      #       name: http-beta-chat-app-http
-    # - protocol: HTTPS
-    #   port: 443
-    #   name: https
-    #   hostname: "chat-app.nxyt.pl"
-    #   tls:
-    #     certificateRefs:
-    #       - kind: Secret
-    #         name: tls-beta-chat-app-http
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: tls-beta-chat-app-http
 ---
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
