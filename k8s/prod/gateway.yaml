@@ -14,7 +14,7 @@ spec:
       hostname: "chat-app.nxyt.pl"
       allowedRoutes:
         namespaces:
-          from: All
+          from: chat-app
       tls:
         certificateRefs:
           - kind: Secret
