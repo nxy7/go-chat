@@ -1,25 +1,26 @@
-apiVersion: gateway.networking.k8s.io/v1beta1
-kind: Gateway
-metadata:
-  name: gtw
-  namespace: chat-app
-  annotations:
-    "cert-manager.io/issuer": "ca-issuer"
-spec:
-  gatewayClassName: cilium
-  listeners:
-    - protocol: HTTPS
-      port: 443
-      name: https
-      hostname: "chat-app.nxyt.pl"
-      allowedRoutes:
-        namespaces:
-          from: chat-app
-      tls:
-        certificateRefs:
-          - kind: Secret
-            name: tls-beta-chat-app-http
----
+# apiVersion: gateway.networking.k8s.io/v1beta1
+# kind: Gateway
+# metadata:
+#   name: tls
+#   namespace: chat-app
+#   annotations:
+#     cert-manager.io/cluster-issuer: ca-issuer
+# spec:
+#   gatewayClassName: cilium
+#   listeners:
+#     - protocol: HTTPS
+#       port: 443
+#       name: https
+#       hostname: "chat-app.nxyt.pl"
+#       allowedRoutes:
+#         namespaces:
+#           from: All
+#         kinds:
+#             - kind: HTTPRoute
+#       tls:
+#         certificateRefs:
+#           - name: chatapp-tls
+# ---
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
@@ -27,8 +28,10 @@ metadata:
   namespace: chat-app
 spec:
   parentRefs:
-    - name: gtw
-      namespace: chat-app
+    - name: tls-gateway
+      namespace: default
+  hostnames:
+    - chat-app.nxyt.pl
   rules:
     - matches:
         - path:
@@ -46,8 +49,10 @@ metadata:
   namespace: chat-app
 spec:
   parentRefs:
-    - name: gtw
-      namespace: chat-app
+    - name: tls-gateway
+      namespace: default
+  hostnames:
+    - chat-app.nxyt.pl
   rules:
     - matches:
         - path:
