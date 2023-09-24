@@ -5,8 +5,8 @@ metadata:
   namespace: chat-app
 spec:
   parentRefs:
-    - name: gtw
-      namespace: chat-app
+    - name: gateway
+      namespace: default
   rules:
     - matches:
         - path:
@@ -24,8 +24,8 @@ metadata:
   namespace: chat-app
 spec:
   parentRefs:
-    - name: gtw
-      namespace: chat-app
+    - name: gateway
+      namespace: default
   rules:
     - matches:
         - path:
